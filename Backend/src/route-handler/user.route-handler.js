@@ -59,7 +59,7 @@ export const signin = async (req, res) => {
             err: "INVALID_CRED"
         })
     }
-    success = await bcrypt.compare(user.password, data.password);
+    success = await bcrypt.compare(data.password, user.password);
     if(!success) {
         return res.status(404).json({
             msg: "Incorrect email or password",
