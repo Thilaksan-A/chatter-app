@@ -5,12 +5,14 @@ import { dbConnect } from "./lib/db.lib.js"
 import  messageRouter  from "./routes/messages.route.js"
 import userRouter from "./routes/user.routes.js"
 import {bcrypt} from "bcrypt"
+import cookieParser from "cookie-parser"
 const SERVER_PORT = process.env.BACKEND_PORT;
 
 console.log(SERVER_PORT);
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 
 

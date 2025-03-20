@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
         id: newUser._id,
     }, process.env.JWT_PASS);
     
-    res.cookie("chatter-token", token);
+    res.cookie("chatterToken", token);
     res.json({
         msg: "successfully created new user"
     })
@@ -69,14 +69,14 @@ export const signin = async (req, res) => {
         id: newUser._id,
     }, process.env.JWT_PASS);
     
-    res.cookie("chatter-token", token);
+    res.cookie("chatterToken", token);
     res.json({
         msg: "successfully logged in"
     })
 }
 
 export const logout = async (req, res) => {
-    res.cookie("chatter-token", "")
+    res.cookie("chatterToken", "")
     res.status(200);
     res.json({});
 }
