@@ -6,9 +6,24 @@ import Welcome from './pages/Welcome'
 import { Toaster } from 'react-hot-toast'
 import { userStore } from './utils/user.state'
 import Dashboard from './pages/Dashboard'
+import { useEffect } from 'react'
+import Spinner from './components/Spinner'
 
 function App() {
-  const {user} = userStore();
+  const {user, checkUser, checkingUser} = userStore();
+
+  useEffect(() => {
+    checkUser();
+  }, [checkUser]);
+
+  if  (checkingUser) {
+    return (
+      <div className='flex items-center justify-center h-screen'>
+        <Spinner />
+      </div> 
+    )
+  } 
+
   return (
     <> 
       <Toaster/>

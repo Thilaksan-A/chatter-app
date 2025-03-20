@@ -7,17 +7,19 @@ export const userStore = create((set) => ({
     user: null,
     isRegistering: false,
     isLoggingIn: false,
+    checkingUser: false,
+
     
     login: async (input) => {
         try {
-            const res = await axiosInstance.post('/auth/signin', input);
+            const res = await axiosInstance.post('/user/signin', input);
             set({user: res.data.user });
             toast.success("Log in Successfull")
         } catch (e) {
             if (e.response?.data.err === "INVALID_CRED") {
                 return toast.error("Invalid email or password")
             } else {
-                console.error("unable to login fe: " + e.response.data);
+                console.error("unable to login fe: " + e.response);
                 toast.error("Unable to login: Server Error");
             }
         }
@@ -29,6 +31,7 @@ export const userStore = create((set) => ({
             const res = await axiosInstance.post("/user/signup", input)
             if (res) {
                 set({user: res.data.user})
+                console.log(res.data.user);
             }
             toast.success("Account created successfully")
 
@@ -49,7 +52,7 @@ export const userStore = create((set) => ({
     logout: async() => {
         try {
             await axiosInstance.post("/user/logout");
-            set({authUser: null});
+            set({user: null});
             toast.success("Log out Successfull");
         } catch (e) {
             console.log("unable to logout fe: " + e);
@@ -57,7 +60,16 @@ export const userStore = create((set) => ({
         }
     },
 
-    checkAuth: async() => {
-
-    }
+    checkUser: async() => {
+        try {
+            set({checkingUser: true})
+            const res = await axiosInstance.get("/user/currUser")
+            set({ user: res.data.user})
+        } catch(e) {
+            set({user: null});
+            console.log("error checking user creds " + e?.response);
+        } finally {
+            set({checkingUser: false }); 
+        }
+    },
 }))
