@@ -4,14 +4,17 @@ import cors from "cors"
 import { dbConnect } from "./lib/db.lib.js"
 import  messageRouter  from "./routes/messages.route.js"
 import userRouter from "./routes/user.routes.js"
-import {bcrypt} from "bcrypt"
+import bcrypt from "bcrypt"
 import cookieParser from "cookie-parser"
 const SERVER_PORT = process.env.BACKEND_PORT;
 
 console.log(SERVER_PORT);
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 

@@ -1,6 +1,6 @@
-import { getMessSchema, messSchema } from "../lib/types.lib";
-import { Message } from "../models/message.model";
-import { User } from "../models/user.model"
+import { getMessSchema, messSchema } from "../lib/types.lib.js";
+import { Message } from "../models/message.model.js";
+import { User } from "../models/user.model.js"
 
 export const getUsers = async (req, res) => {
     try {
