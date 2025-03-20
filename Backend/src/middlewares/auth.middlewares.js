@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken"
-export const protectedRoute = (req, res, next) => {
-    const token = req.cookie.chatterToken
+import {User} from "../models/user.model.js"
+
+export const protectedRoute = async (req, res, next) => {
+    const token = req.cookies.chatterToken
     if (!token) {
         return res.status(401).json({
             msg: "Unauthorised access: no token found"
@@ -8,7 +10,7 @@ export const protectedRoute = (req, res, next) => {
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_PASS)
-        req.user = User.findById(decoded.id).select("-password");
+        req.user = await User.findById(decoded.id).select("-password");
         next();
     } catch (e) {
         console.log("unable to authenticate: " + e);

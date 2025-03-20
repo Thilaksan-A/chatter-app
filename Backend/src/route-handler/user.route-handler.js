@@ -59,7 +59,7 @@ export const signin = async (req, res) => {
             err: "INVALID_CRED"
         })
     }
-    success = await bcrypt.compare(user.password, user.password);
+    success = await bcrypt.compare(user.password, data.password);
     if(!success) {
         return res.status(404).json({
             msg: "Incorrect email or password",
@@ -86,4 +86,10 @@ export const logout = async (req, res) => {
     res.cookie("chatterToken", "")
     res.status(200);
     res.json({});
+}
+
+export const currUser = async(req, res) => {
+    res.json({
+        user: req.user
+    })
 }
