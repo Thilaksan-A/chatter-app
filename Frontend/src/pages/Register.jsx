@@ -30,9 +30,9 @@ export const Register = () => {
       <div className="text-center p-6 bg-white rounded-lg shadow-md w-11/12 sm:w-96">
         <h2 className="text-3xl font-semibold text-gray-800 mb-6">Register</h2>
         {isRegistering && <div className="flex justify-center items-center"> 
-          <Spinner />
-        </div>
-       }
+            <Spinner />
+          </div>
+        }
         {!isRegistering && <form onSubmit={handleRegister} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
