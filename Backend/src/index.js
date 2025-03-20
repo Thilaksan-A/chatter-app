@@ -1,7 +1,10 @@
-import express from "express";
+import express from "express"
 import 'dotenv/config'
 import cors from "cors"
-import { dbConnect } from "./lib/db.lib.js";
+import { dbConnect } from "./lib/db.lib.js"
+import  messageRouter  from "./routes/messages.route.js"
+import userRouter from "./routes/user.routes.js"
+import {bcrypt} from "bcrypt"
 const SERVER_PORT = process.env.BACKEND_PORT;
 
 console.log(SERVER_PORT);
@@ -14,6 +17,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("HI")
 })
+
+app.use("/api/message", messageRouter);
+app.use("/api/user",userRouter);
 
 
 app.listen(SERVER_PORT, () => {
