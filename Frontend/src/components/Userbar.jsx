@@ -13,11 +13,11 @@ export const Userbar = () => {
 
   return(
     <div className="w-72 p-5 border-r">
-      <div className="flex items-center gap-2">
+      <div className="flex just items-center gap-4 ">
         <Users className="text-xl" />
         <span className="font-medium">Contacts</span>
       </div>
-      <div className="mt-4">
+      <div className="mt-8">
         {users && users.length > 0 && users.map((user) => (
           <button
             key={user._id}

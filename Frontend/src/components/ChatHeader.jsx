@@ -7,7 +7,7 @@ const ChatHeader = ({user}) => {
   const {setSelectedUser} = chatStore();
   return (
     <div className="flex justify-between items-center bg-gray-900 p-4 text-white">
-      <div className="flex items-center">
+      <div className="flex items-center gap-4">
         <img src={profileImage} alt={user.fullName} className="w-10 h-10 rounded-full"/> 
         <div>
           <h3 className="text-xl">{user.fullName}</h3>
