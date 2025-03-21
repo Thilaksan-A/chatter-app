@@ -3,7 +3,7 @@ import { chatStore } from "../utils/chat.state";
 import { X } from "lucide-react";
 
 
-const ChatHeader = (user) => {
+const ChatHeader = ({user}) => {
   const {setSelectedUser} = chatStore();
   return (
     <div className="flex justify-between items-center bg-gray-900 p-4 text-white">
