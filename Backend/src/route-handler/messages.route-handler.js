@@ -30,12 +30,12 @@ export const sendMessage = async (req, res) => {
         let msg = await Message.create({
             msg: data.msg,
             sender: req.user._id,
-            reeiver: data.receiver,
+            receiver: data.receiver,
         });
     
         return res.json({
-            msg: "Message created `````````successfully",
-            id: msg._id,
+            status: "Message created successfully",
+            msg: msg,
         })
     } catch (e) {
         console.log("Unable to send msg: " + e);
@@ -47,10 +47,11 @@ export const sendMessage = async (req, res) => {
 }
 
 export const getMessages = async (req, res) => {
-    const data = req.body;
-    let success =  getMessSchema.safeParse(data);
+    // const data = req.body;
+    const { receiver } = req.query
+    let success =  getMessSchema.safeParse({receiver});
     if (!success) {
-        return res``.status(404).json({
+        return res.status(404).json({
             msg: "Invalid Inputs",
             err: "INPUT_ERR"
         })
@@ -61,10 +62,10 @@ export const getMessages = async (req, res) => {
             $or: [
                 {
                     sender: req.user._id,
-                    receiver: data.receiver
+                    receiver: receiver
                 },
                 {
-                    sender: data.receiver,
+                    sender: receiver,
                     receiver: req.user._id
                 }
             ]
