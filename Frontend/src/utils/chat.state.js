@@ -13,7 +13,12 @@ export const chatStore = create((set, get) => ({
     getMessages: async (data) => {
         try {
             set({gettingMessages: true})
-            const res = axiosInstance.get("/Messages", data);
+            const res = await axiosInstance.get("/message/messages", {
+                params: {
+                    receiver: data.receiver
+                }
+            });
+            console.log(res);
             set({messages: res.data})
         } catch (e) {
             toast.error("unable to fetch messages");
@@ -32,11 +37,11 @@ export const chatStore = create((set, get) => ({
         const {messages} = get()
         try {
             set({gettingMessages: true})
-            const res = await axiosInstance("/sendMessage", data)
-            set({messages : [...messages, res.data]})
+            const res = await axiosInstance.post("/message/send", data)
+            set({messages : [...messages, res.data.msg]})
         } catch (e) {
             toast.error("Unable to send message right now")
-            console.error(e.response?.data.msg);
+            console.error(e);
         }
     },
 
