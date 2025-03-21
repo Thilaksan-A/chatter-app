@@ -1,5 +1,7 @@
 import profileImage from "../assets/profile.webp";
 import { chatStore } from "../utils/chat.state";
+import { X } from "lucide-react";
+
 
 const ChatHeader = (user) => {
   const {setSelectedUser} = chatStore();
