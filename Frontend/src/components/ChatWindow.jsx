@@ -8,15 +8,21 @@ import { userStore } from "../utils/user.state";
 
 
 const ChatWindow = () => {
-  const {selectedUser, messages, getMessages, sendMessage} = chatStore();
+  const {selectedUser, messages, getMessages, sendMessage, socketMessages, clearSocketMessages} = chatStore();
   const {user} = userStore();
   const [message, setMessage] = useState  ('');
   
   useEffect(() => {
     if (selectedUser) {
       getMessages({receiver: selectedUser._id})
+      socketMessages();
+
+      return () => {
+        clearSocketMessages();
+
+      }
     }
-  }, [getMessages, selectedUser]);
+  }, [getMessages, selectedUser, socketMessages, clearSocketMessages]);
 
     
   const handleSendMessage = (e) => {

@@ -29,8 +29,17 @@ export const chatStore = create((set, get) => ({
 
     },
 
-    clearMessages: () => {
-
+    socketMessages: () => {
+        const { selectedUser} = get()
+        if (!selectedUser) return;
+        const socket = userStore.getState().socket;
+        socket.on("newMessage", (newMessage) => {
+            const isMessageSentFromSelectedUser = newMessage.sender === selectedUser._id
+            if (!isMessageSentFromSelectedUser) return;
+            set({
+                messages: [...get().messages, newMessage],
+            });
+        });
     },
 
     sendMessage: async (data) => {
@@ -55,6 +64,11 @@ export const chatStore = create((set, get) => ({
         }
     }, 
     
+    clearSocketMessages: () => {
+        const socket = userStore.getState().socket;
+        socket.off("newMessage");
+    },
+
     setSelectedUser: (selectedUser) => set({selectedUser})
 
 }))

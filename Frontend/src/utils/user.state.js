@@ -1,13 +1,14 @@
 import { create } from 'zustand'
 import { axiosInstance } from './axios.utils'
 import toast from "react-hot-toast";
+import {io} from "socket.io-client"
 
-
-export const userStore = create((set) => ({
+export const userStore = create((set, get) => ({
     user: null,
     isRegistering: false,
     isLoggingIn: false,
     checkingUser: false,
+    socket: null,
 
     
     login: async (input) => {
@@ -15,6 +16,7 @@ export const userStore = create((set) => ({
             const res = await axiosInstance.post('/user/signin', input);
             set({user: res.data.user });
             toast.success("Log in Successfull")
+            get().socketOn();
         } catch (e) {
             if (e.response?.data.err === "INVALID_CRED") {
                 return toast.error("Invalid email or password")
@@ -34,7 +36,7 @@ export const userStore = create((set) => ({
                 console.log(res.data.user);
             }
             toast.success("Account created successfully")
-
+            get().socketOn();
         } catch(e)  {
             if (e.response?.data.err === "DUP_EMAIL") {
                 toast.error("Email already exists");
@@ -54,6 +56,7 @@ export const userStore = create((set) => ({
             await axiosInstance.post("/user/logout");
             set({user: null});
             toast.success("Log out Successfull");
+            get().socketOff();
         } catch (e) {
             console.log("unable to logout fe: " + e);
             toast.error("Something went wrong");
@@ -65,6 +68,7 @@ export const userStore = create((set) => ({
             set({checkingUser: true})
             const res = await axiosInstance.get("/user/currUser")
             set({ user: res.data.user})
+            get().socketOn();
         } catch(e) {
             set({user: null});
             console.log("error checking user creds " + e?.response);
@@ -72,4 +76,22 @@ export const userStore = create((set) => ({
             set({checkingUser: false }); 
         }
     },
+
+    socketOn: () => {
+        const {user} = get();
+        if (!user || get().socket?.connected) return;
+        const socket = io("http://localhost:9000", {
+            query: {
+                userId: user._id
+            }
+        })
+        socket.connect();
+        set({socket: socket})
+    },
+
+    socketOff: () => {
+        if (get().socket?.connected) {
+            get().socket.disconnect();
+        }
+    }
 }))
