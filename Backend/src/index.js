@@ -6,10 +6,8 @@ import  messageRouter  from "./routes/messages.route.js"
 import userRouter from "./routes/user.routes.js"
 import bcrypt from "bcrypt"
 import cookieParser from "cookie-parser"
+import { app, httpServer } from "./lib/socket.js"
 const SERVER_PORT = process.env.BACKEND_PORT;
-
-console.log(SERVER_PORT);
-const app = express();
 
 app.use(cors({
     origin:"http://localhost:5173",
@@ -27,7 +25,7 @@ app.use("/api/message", messageRouter);
 app.use("/api/user",userRouter);
 
 
-app.listen(SERVER_PORT, () => {
+httpServer.listen(SERVER_PORT, () => {
     console.log("now listening on port: " + SERVER_PORT);
     dbConnect();
 })

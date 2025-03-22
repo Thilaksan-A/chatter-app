@@ -1,3 +1,4 @@
+import { io, receiverSocketId } from "../lib/socket.js";
 import { getMessSchema, messSchema } from "../lib/types.lib.js";
 import { Message } from "../models/message.model.js";
 import { User } from "../models/user.model.js"
@@ -32,7 +33,12 @@ export const sendMessage = async (req, res) => {
             sender: req.user._id,
             receiver: data.receiver,
         });
-    
+        
+        const targetSocketId = receiverSocketId(msg.receiver);
+        if (targetSocketId) {
+            io.to(targetSocketId).emit("newMessage", msg);
+        }
+
         return res.json({
             status: "Message created successfully",
             msg: msg,
